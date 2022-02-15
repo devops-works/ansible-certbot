@@ -1,0 +1,36 @@
+- name: Adds certbot PPA
+  apt_repository:
+    repo: "ppa:certbot/certbot"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Installs python-certbot
+  apt:
+    pkg: python-certbot
+    state: present
+  ignore_errors: true
+  register: __python_certbot
+
+- name: Installs certbot
+  apt:
+    pkg: certbot
+    state: present
+  ignore_errors: true
+  when: __python_certbot is failed
+
+- name: Creates letsencrypt log dir
+  file:
+    path: "{{ haproxy_letsencrypt_logfile | dirname }}"
+    state: directory
+
+- name: Create hook directories
+  file:
+    path: /etc/letsencrypt/renewal-hooks/{{ item }}
+    mode: 0750
+    owner: root
+    group: root
+  loop:
+    - pre
+    - post
+

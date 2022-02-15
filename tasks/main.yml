@@ -1,0 +1,18 @@
+
+---
+- include_tasks:
+    file: check_vars.yml
+    apply:
+      tags:
+        - check
+        - haproxy
+  tags:
+    - always
+
+- include_tasks:
+    file: certbot.yml
+    apply:
+      tags:
+        - certbot
+  tags:
+    - always
