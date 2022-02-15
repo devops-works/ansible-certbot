@@ -26,13 +26,13 @@
 
 - name: Create hook directories
   file:
-    path: /etc/letsencrypt/renewal-hooks/{{ item }}
+    path: /etc/letsencrypt/{{ item }}
     mode: 0750
     owner: root
     group: root
     state: directory
   loop:
-    - ""
-    - pre
-    - post
+    - renewal-hooks
+    - renewal-hooks/pre
+    - renewal-hooks/post
 
